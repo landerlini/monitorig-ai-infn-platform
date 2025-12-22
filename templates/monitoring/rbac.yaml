@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: vkd-dagsentry-account
-  namespace: {{ .Values.monitoringNamespace | default "monitoring" }}
+  namespace: {{ .Release.Namespace }}
 
 ---
 
@@ -10,7 +10,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: usermonitor-account
-  namespace: {{ .Values.monitoringNamespace | default "monitoring" }}
+  namespace: {{ .Release.Namespace }}
 
 ---
 
@@ -18,7 +18,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: vkd-dagsentry
-  namespace: {{ .Values.monitoringNamespace | default "monitoring" }}
+  namespace: {{ .Release.Namespace }}
 rules:
   - apiGroups: [batch]
     resources: [jobs, "jobs/status"]
@@ -49,7 +49,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: vkd-dagsentry-binding
-  namespace: {{ .Values.monitoringNamespace | default "monitoring" }}
+  namespace: {{ .Release.Namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -57,7 +57,7 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: vkd-dagsentry-account
-    namespace: {{ .Values.monitoringNamespace | default "monitoring" }}
+    namespace: {{ .Release.Namespace }}
 
 
 ---
@@ -65,7 +65,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: usermonitor-role
-  namespace: {{ .Values.monitoringNamespace | default "monitoring" }}
+  namespace: {{ .Release.Namespace }}
 rules:
   - apiGroups: [kueue.x-k8s.io]
     resources: [workloads, "workloads/status"]
@@ -83,7 +83,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: usermonitor-binding
-  namespace: {{ .Values.monitoringNamespace | default "monitoring" }}
+  namespace: {{ .Release.Namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -91,5 +91,5 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: usermonitor-account
-    namespace: {{ .Values.monitoringNamespace | default "monitoring" }}
+    namespace: {{ .Release.Namespace }}
 

@@ -2,11 +2,6 @@ hostname:
 nfsServerAddress: 123.56.78.90
 
 ################################################################################
-## Monitoring (templates/monitoring/*.yaml)
-
-monitoringNamespace: monitoring
-
-################################################################################
 # Grafana (templates/monitoring/grafana.yaml)
 #
 grafanaNfsPath: /grafana
@@ -14,7 +9,6 @@ vkdGitBranch: jfs
   
 # To be generated with: `openssl rand -hex 32`
 postgresPassword: 
-
 
 # To be defined in values.yaml
 grafanaAdminPassword:

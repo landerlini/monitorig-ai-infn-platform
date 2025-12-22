@@ -6,7 +6,7 @@ metadata:
 spec:
   repo: https://raw.githubusercontent.com/cloudworkz/kube-eagle-helm-chart/master
   chart: kube-eagle
-  targetNamespace: {{ .Values.monitoringNamespace | default "monitoring" }}
+  targetNamespace: {{ .Release.Namespace }}
   createNamespace: true
   valuesContent: |-
     serviceMonitor:

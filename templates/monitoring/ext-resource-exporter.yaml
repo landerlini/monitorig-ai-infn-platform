@@ -5,7 +5,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ext-res-alloc-exporter
-  namespace: {{ .Values.monitoringNamespace | default "monitoring" }}
+  namespace: {{ .Release.Namespace }}
   labels:
     app: ext-res-alloc-exporter
 spec:
@@ -63,7 +63,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: ext-res-alloc-exporter
-  namespace: {{ .Values.monitoringNamespace | default "monitoring" }}
+  namespace: {{ .Release.Namespace }}
 
   labels:
     app: ext-res-alloc-exporter
@@ -97,7 +97,7 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: ext-resource-exporter
-    namespace: {{ .Values.monitoringNamespace | default "monitoring" }}
+    namespace: {{ .Release.Namespace }}
 roleRef:
   kind: ClusterRole
   name: ext-resource-exporter
@@ -112,7 +112,7 @@ metadata:
   labels:
     app: ext-res-alloc-exporter
   name: ext-resource-exporter
-  namespace: moni{{ .Values.monitoringNamespace | default "monitoring" }}toring
+  namespace: {{ .Release.Namespace }}
 
 
 {{ end }}
