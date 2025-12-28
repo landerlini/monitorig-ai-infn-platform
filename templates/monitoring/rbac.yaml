@@ -26,11 +26,11 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: {{ Release.Name }}-usermonitor-binding
+  name: {{ .Release.Name }}-usermonitor-binding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ Release.Name }}-usermonitor-role
+  name: {{ .Release.Name }}-usermonitor-role
 subjects:
   - kind: ServiceAccount
     name: {{ .Release.Name }}-usermonitor-account
