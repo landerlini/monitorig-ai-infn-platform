@@ -14,7 +14,7 @@ spec:
       labels:
         app: {{ .Release.Name }}-user-monitor
     spec:
-      serviceAccountName: usermonitor-account
+      # serviceAccountName: {{ .Release.Name }}-usermonitor-account
       restartPolicy: Always
       volumes:
         - name: grafana-persistency

@@ -1,71 +1,15 @@
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: vkd-dagsentry-account
-  namespace: {{ .Release.Namespace }}
-
----
 
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: usermonitor-account
-  namespace: {{ .Release.Namespace }}
+  name: {{ .Release.Name }}-usermonitor-account
 
 ---
 
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: vkd-dagsentry
-  namespace: {{ .Release.Namespace }}
-rules:
-  - apiGroups: [batch]
-    resources: [jobs, "jobs/status"]
-    verbs: [list, watch, patch, get, delete, update]
-  - apiGroups: [ "" ]
-    resources: [configmaps]
-    verbs: [list, watch, patch, get, delete, update, create]
-
-  # Framework: runtime observation of namespaces & CRDs (addition/deletion).
-  - apiGroups: [apiextensions.k8s.io]
-    resources: [customresourcedefinitions]
-    verbs: [list, watch]
-  - apiGroups: [""]
-    resources: [namespaces]
-    verbs: [list, watch]
-  - apiGroups: [ "" ]
-    resources: [ events ]
-    verbs: [ create ]
-
-  # Framework: admission webhook configuration management.
-  - apiGroups: [admissionregistration.k8s.io/v1, admissionregistration.k8s.io/v1beta1]
-    resources: [validatingwebhookconfigurations, mutatingwebhookconfigurations]
-    verbs: [create, patch]
-
----
-
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: vkd-dagsentry-binding
-  namespace: {{ .Release.Namespace }}
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: vkd-dagsentry
-subjects:
-  - kind: ServiceAccount
-    name: vkd-dagsentry-account
-    namespace: {{ .Release.Namespace }}
-
-
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: usermonitor-role
-  namespace: {{ .Release.Namespace }}
+  name: {{ .Release.Name }}-usermonitor-role
 rules:
   - apiGroups: [kueue.x-k8s.io]
     resources: [workloads, "workloads/status"]
@@ -82,14 +26,50 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: usermonitor-binding
-  namespace: {{ .Release.Namespace }}
+  name: {{ Release.Name }}-usermonitor-binding
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: usermonitor-role
+  name: {{ Release.Name }}-usermonitor-role
 subjects:
   - kind: ServiceAccount
-    name: usermonitor-account
-    namespace: {{ .Release.Namespace }}
+    name: {{ .Release.Name }}-usermonitor-account
 
+
+{{ if .Values.jhubExtResAllocExporterEnabled }}
+---
+
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ .Release.Name }}-ext-resource-exporter
+rules:
+  - apiGroups: [""]       # "" indicates the core API group
+    resources: ["nodes", "pods"]
+    verbs: ["get", "watch", "list"]
+
+---
+
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ .Release.Name }}-ext-resource-exporter
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Release.Name }}-ext-resource-exporter
+roleRef:
+  kind: ClusterRole
+  name: {{ .Release.Name }}-ext-resource-exporter
+  apiGroup: rbac.authorization.k8s.io
+
+
+---
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app: {{ .Release.Name }}-ext-res-alloc-exporter
+  name: {{ .Release.Name }}-ext-resource-exporter
+
+{{ end }}

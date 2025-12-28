@@ -2,8 +2,7 @@
 apiVersion: helm.cattle.io/v1
 kind: HelmChart
 metadata:
-  name: prometheus-stack
-  namespace: kube-system
+  name: {{ .Release.Name }}-prometheus-stack
 spec:
   repo: https://prometheus-community.github.io/helm-charts
   chart: kube-prometheus-stack
