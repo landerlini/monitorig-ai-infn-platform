@@ -124,7 +124,7 @@ stringData:
 apiVersion: v1
 kind: Service
 metadata:
-  name: user-monitor
+  name: {{ .Release.Name }}-user-monitor
   labels:
     app: {{ .Release.Name }}-user-monitor
 spec:
