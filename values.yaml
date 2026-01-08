@@ -1,11 +1,14 @@
+## Hostname of the deployment without protocol to be TLS-terminated with cert-manager
 hostname: 
-nfsServerAddress: 123.56.78.90
-
+  
 ################################################################################
 # Grafana (templates/monitoring/grafana.yaml)
 #
+
+## Directory where the dashboards (not the data) are stored
+## The directory on NFS must exist and be writable by user 472!
+nfsServerAddress: 10.43.250.250
 grafanaNfsPath: /grafana
-vkdGitBranch: jfs
   
 # To be generated with: `openssl rand -hex 32`
 postgresPassword: 
@@ -54,7 +57,4 @@ OAuthName: INFN Cloud
 OAuthEndpoint: https://iam.cloud.infn.it
 IamClientId:
 IamClientSecret: 
-
-# vkdPrivateKey is the SSH key to GitOps landerlini/vk-dispatcher (deploy key)
-vkdPrivateKey:
 

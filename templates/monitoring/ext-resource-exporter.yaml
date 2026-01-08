@@ -4,16 +4,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ext-res-alloc-exporter
-  namespace: {{ .Release.Namespace }}
+  name: {{ .Release.Name }}-ext-res-alloc-exporter
   labels:
-    app: ext-res-alloc-exporter
+    app: {{ .Release.Name }}-ext-res-alloc-exporter
 spec:
   replicas: 1
   minReadySeconds: 5
   selector:
     matchLabels:
-      app: ext-res-alloc-exporter
+      app: {{ .Release.Name }}-ext-res-alloc-exporter
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -22,10 +21,10 @@ spec:
   template:
     metadata:
       labels:
-        app: ext-res-alloc-exporter
+        app: {{ .Release.Name }}-ext-res-alloc-exporter
         tier: service
     spec:
-      serviceAccountName: ext-resource-exporter
+      serviceAccountName: {{ .Release.Name }}-ext-resource-exporter
       containers:
       - name: exporter
         image: {{ .Values.jhubCustomExporterImage }}
@@ -62,11 +61,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ext-res-alloc-exporter
-  namespace: {{ .Release.Namespace }}
+  name: {{ .Release.Name }}-ext-res-alloc-exporter
 
   labels:
-    app: ext-res-alloc-exporter
+    app: {{ .Release.Name }}-ext-res-alloc-exporter
     tier: service
 
 spec:
@@ -76,43 +74,8 @@ spec:
     name: http
     targetPort: 8080
   selector:
-    app: ext-res-alloc-exporter
+    app: {{ .Release.Name }}-ext-res-alloc-exporter
     
-
----
-
-kind: ClusterRole
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: ext-resource-exporter
-rules:
-  - apiGroups: [""]       # "" indicates the core API group
-    resources: ["nodes", "pods"]
-    verbs: ["get", "watch", "list"]
----
-kind: ClusterRoleBinding
-apiVersion: rbac.authorization.k8s.io/v1
-metadata:
-  name: ext-resource-exporter
-subjects:
-  - kind: ServiceAccount
-    name: ext-resource-exporter
-    namespace: {{ .Release.Namespace }}
-roleRef:
-  kind: ClusterRole
-  name: ext-resource-exporter
-  apiGroup: rbac.authorization.k8s.io
-
-
----
-
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  labels:
-    app: ext-res-alloc-exporter
-  name: ext-resource-exporter
-  namespace: {{ .Release.Namespace }}
 
 
 {{ end }}
