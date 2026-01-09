@@ -14,7 +14,9 @@ spec:
     prometheus:
       service:
         type: ClusterIP 
-      serviceMonitorNamespaceSelector: {}
+      serviceMonitorSelector: {}
+      serviceMonitorNamespaceSelector: 
+        any: true
 
       prometheusSpec:
         serviceMonitorSelectorNilUsesHelmValues: false
