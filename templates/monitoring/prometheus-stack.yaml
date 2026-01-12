@@ -14,10 +14,12 @@ spec:
     prometheus:
       service:
         type: ClusterIP 
-      serviceMonitorNamespaceSelector: {}
 
       prometheusSpec:
         serviceMonitorSelectorNilUsesHelmValues: false
+        serviceMonitorSelector: {}
+        serviceMonitorNamespaceSelector: 
+          any: true
         additionalScrapeConfigs:
           - job_name: gpu-metrics
             scrape_interval: 5s
