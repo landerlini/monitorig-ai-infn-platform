@@ -12,6 +12,7 @@ spec:
     grafana:
       enabled: false
     prometheus:
+      fullnameOverride: {{ .Release.Name }}
       service:
         type: ClusterIP 
 
