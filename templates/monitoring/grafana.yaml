@@ -113,7 +113,7 @@ stringData:
       - name: prometheus
         type: prometheus
         access: proxy
-        url: http://{{ .Release.Name }}-prometheus-prometheus:9090
+        url: http://{{ .Release.Name }}-prometheus:9090
         basicAuth: false
         jsonData:
           tlsSkipVerify: {{ .Values.tlsSkipVerify | default true }}
